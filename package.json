@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/JulsD/node.js-study/issues"
   },
-  "homepage": "https://github.com/JulsD/node.js-study#readme"
+  "homepage": "https://github.com/JulsD/node.js-study#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "nodemon": "^1.17.3"
+  }
 }
