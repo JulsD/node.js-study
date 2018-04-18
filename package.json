@@ -1,0 +1,20 @@
+{
+  "name": "node.js-study",
+  "version": "1.0.0",
+  "description": "study",
+  "main": "app.js",
+  "scripts": {
+    "start": "",
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulsD/node.js-study.git"
+  },
+  "author": "Iuliia Dutchak <dutchak.julia@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JulsD/node.js-study/issues"
+  },
+  "homepage": "https://github.com/JulsD/node.js-study#readme"
+}
