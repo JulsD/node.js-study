@@ -1,5 +1,5 @@
-import { default as User } from './User';
-import { default as Product } from './Product';
+import User from './User';
+import Product from './Product';
 
 export {
     User,
