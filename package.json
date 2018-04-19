@@ -4,7 +4,7 @@
   "description": "study",
   "main": "app.js",
   "scripts": {
-    "start": "",
+    "start": "nodemon --exec node -r babel-register app.js",
     "test": ""
   },
   "repository": {
