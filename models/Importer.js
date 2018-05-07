@@ -1,18 +1,17 @@
-const Converter = require("csvtojson").Converter;
+const csvtojson = require('csvtojson')
 
 class Importer {
     constructor() {}
     
     convert(path) {
-        let converter = new Converter({});
-
-        converter.fromFile(path,function(err,result) {
-            if(err){
-                console.log("An Error Has Occured");
-                console.log(err);  
-            } 
-            return result;
-        });
+        csv()
+        .fromFile(path)
+        .on('json', (jsonObj) => {
+            return jsonObj;
+        })
+        .on('done',(error) => {
+            console.log(error);
+        })
     }
     
     import(path) {
