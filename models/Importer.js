@@ -16,11 +16,11 @@ class Importer {
     }
     
     import(path) {
-
+        return new Promise(this.convert(path));
     }
 
     importSync(path) {
-        
+        return this.convert(path);
     }
 }
 
