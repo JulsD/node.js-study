@@ -4,18 +4,23 @@ class Importer {
     constructor() {}
     
     convert(path) {
-        csv()
-        .fromFile(path)
-        .on('json', (jsonObj) => {
-            return jsonObj;
-        })
-        .on('done',(error) => {
-            console.log(error);
-        })
+        return new Promise(resolve, reject) {
+            csv()
+            .fromFile(path)
+            .on('json', (jsonObj) => {
+                resolve(jsonObj);
+            })
+            .on('done',(error) => {
+                console.log(error);
+            })
+            .on('error', error => {
+                reject(error);
+            } )
+        }            
     }
     
     import(path) {
-        return new Promise(this.convert(path));
+        return this.convert(path);
     }
 
     importSync(path) {
