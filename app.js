@@ -1,5 +1,5 @@
 import config from './config/app.config.json';
-import { User, Product, Dirwatcher, Importer } from './models';
+import { User, Product, DirWatcher, Importer } from './models';
 
 console.log(config.name);
 
@@ -16,4 +16,6 @@ myImporter.import('./data/test.csv')
     console.log(error);
 });
 
-console.log('Sync data log: ', myImporter.importSync('./data/test.csv'));
+const myDirWatcher = new DirWatcher();
+
+myDirWatcher.watch('./data/', 3000);
