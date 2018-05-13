@@ -18,6 +18,6 @@ myDirWatcher.on('changed', (path) => {
         console.log('Async data log: ', data);
     })
     .catch((error) => {
-        console.log(error);
+        console.log('error: ',error);
     });
 });
