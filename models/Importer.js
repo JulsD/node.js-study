@@ -2,9 +2,15 @@ import csvjson from 'csvjson';
 import { readFileSync, readFile } from 'fs';
 
 class Importer {
+    listen(dirWatcher, cb){
+        dirWatcher.on('changed', (path) => {
+            this.import(path)
+                .then((data) => cb(null, data))
+                .catch((error) => cb(error));
+        });
+    }
+
     convert(fileData) {
-        console.log('fileData is here: ', fileData);
-        
         return csvjson.toObject(fileData);
     }
     
