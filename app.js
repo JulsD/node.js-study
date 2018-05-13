@@ -8,14 +8,16 @@ const Product_1 = new Product();
 
 const myImporter = new Importer();
 
-myImporter.import('./data/test.csv')
-.then((data) => {
-    console.log('Async data log: ', data);
-})
-.catch((error) => {
-    console.log(error);
-});
-
 const myDirWatcher = new DirWatcher();
 
 myDirWatcher.watch('./data/', 3000);
+
+myDirWatcher.on('changed', (path) => {
+    myImporter.import(path)
+    .then((data) => {
+        console.log('Async data log: ', data);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+});
