@@ -5,18 +5,18 @@ const fs = require('fs');
 class DirWatcher extends EventEmitter {
     constructor() {
         super();
-        this.files_list = null;
+        this.filesList = null;
     }
 
     findDiff(files, dirPath) {
         let diff = {};
         let addedFiles, deletedFiles;
 
-        if (this.files_list === null) {
+        if (this.filesList === null) {
             addedFiles = files;
         } else {
-            addedFiles = files.filter(x => !this.files_list.includes(x));
-            deletedFiles = this.files_list.filter(x => !files.includes(x));
+            addedFiles = files.filter(x => !this.filesList.includes(x));
+            deletedFiles = this.filesList.filter(x => !files.includes(x));
         }
 
         if (addedFiles && addedFiles.length > 0) {
@@ -25,7 +25,7 @@ class DirWatcher extends EventEmitter {
         if (deletedFiles && deletedFiles.length > 0) {
             diff.deletedFiles = deletedFiles.map((fileName) => path.join(dirPath, fileName));
         }
-        
+
         return diff;
     }
 
@@ -45,7 +45,7 @@ class DirWatcher extends EventEmitter {
                             });
                         }
                     }
-                    this.files_list = files;
+                    this.filesList = files;
                 }
             });
 

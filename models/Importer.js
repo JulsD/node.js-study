@@ -2,9 +2,7 @@ const csvjson = require('csvjson');
 const fs = require('fs');
 
 class Importer {
-    constructor() {
-        this.filesDataAObj = {};
-    }
+    constructor() {}
 
     convert(fileData) {
         return csvjson.toObject(fileData);
