@@ -1,5 +1,5 @@
 import config from './config/app.config.json';
-import { User, Product } from './models';
+import { User, Product } from './moduls';
 
 console.log(config.name);
 
