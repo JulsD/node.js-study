@@ -1,5 +1,5 @@
-const program = require('commander');
-var colors = require('colors');
+const program = require ('commander');
+const colors = require ('colors');
 
 program
     .version('0.0.1')
@@ -54,8 +54,16 @@ function reverse(str) {
     process.stdout.on('data', (str) => process.stdout.write(str));
     process.stdin.end();
 }
-function transform(str) { 
-    console.log('transform');
+function transform(str) {
+    const { Transform } = require('stream');
+    const upperCaseTr = new Transform({
+        transform(chunk, encoding, callback) {
+            this.push(chunk.toString().toUpperCase());
+            callback();
+        }
+    });
+
+    process.stdin.pipe(upperCaseTr).pipe(process.stdout);
 }
 function outputFile(filePath) { 
     console.log('outputFile:', filePath);
