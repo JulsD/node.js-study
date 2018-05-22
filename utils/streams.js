@@ -20,7 +20,7 @@ else if (program.action == 'reverse') { checkArgsStr(reverse) }
 else if (program.action == 'transform') { checkArgsStr(transform) }
 else if (program.action == 'outputFile') { checkFilePath(outputFile) }
 else if (program.action == 'convertFromFile') { checkFilePath(convertFromFile, {csv: true}) }
-else if (program.action == 'convertToFile') { checkFilePath(convertToFile) }
+else if (program.action == 'convertToFile') { checkFilePath(convertToFile, {csv: true}) }
 else console.log('Action doesn\'t exist')
 
 // Util functions:
@@ -42,7 +42,7 @@ function checkArgsStr(fn) {
 function checkFilePath(fn, type) {
     let anyFilePathRegexp = new RegExp('^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))');
     let csvFilePathRegexp = new RegExp('^.*\.csv$');
-    let filePathRegexp = type.csv ? csvFilePathRegexp : anyFilePathRegexp;
+    let filePathRegexp = type && type.csv ? csvFilePathRegexp : anyFilePathRegexp;
     if(program.file && filePathRegexp.test(program.file)) {
         fn(program.file);
     } else if (program.file && !filePathRegexp.test(program.file)) {
@@ -98,5 +98,15 @@ function convertFromFile(filePath) {
     reader.pipe(toObject).pipe(stringify).pipe(process.stdout);
 }
 function convertToFile(filePath) { 
-    console.log('convertToFile:', filePath);
+    const fileName = path.basename(filePath).slice(0, -4) + '.json';
+    const dirPath = path.resolve(__dirname, (path.dirname(filePath)));
+    const reader = fs.createReadStream(path.join(__dirname, filePath));
+    const writer = fs.createWriteStream(dirPath + '/' + fileName);
+    const toObject = csvjson.stream.toObject();
+    const stringify = csvjson.stream.stringify();
+
+    reader.on('error', (error) => { console.log(error) });
+    writer.on('error', (error) => { console.log(error) });
+
+    reader.pipe(toObject).pipe(stringify).pipe(writer);
 }
