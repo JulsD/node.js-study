@@ -30,15 +30,21 @@ function checkArgsStr(fn) {
     if (program.args.length > 0) {
         fn(program.args.join(' '));
     } else {
-        console.log('This action needs a string argument');
+        console.error('This action needs a string argument.');
+        process.exit(1);
     }
 } 
 
 function checkFilePath(fn) {
-    if(program.file) {
+    let pathRegexp = new RegExp('/^(.+)/([^/]+)$/');
+    if(program.file && pathRegexp.test(program.file)) {
         fn(program.file);
+    } else if (program.file && !pathRegexp.test(program.file)) {
+        console.error('Check the path to the file.');
+        process.exit(1);
     } else {
-        console.log('File path should be spesified');
+        console.error('File path should be spesified.');
+        process.exit(1);
     }
 } 
 
