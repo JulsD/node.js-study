@@ -2,6 +2,7 @@ const program = require ('commander');
 const colors = require ('colors');
 const fs = require ('fs');
 const path = require ('path');
+const csvjson = require('csvjson');
 
 program
     .version('0.0.1')
@@ -18,7 +19,7 @@ if (!process.argv.slice(2).length) {
 else if (program.action == 'reverse') { checkArgsStr(reverse) }
 else if (program.action == 'transform') { checkArgsStr(transform) }
 else if (program.action == 'outputFile') { checkFilePath(outputFile) }
-else if (program.action == 'convertFromFile') { checkFilePath(convertFromFile) }
+else if (program.action == 'convertFromFile') { checkFilePath(convertFromFile, {csv: true}) }
 else if (program.action == 'convertToFile') { checkFilePath(convertToFile) }
 else console.log('Action doesn\'t exist')
 
@@ -37,8 +38,11 @@ function checkArgsStr(fn) {
     }
 } 
 
-function checkFilePath(fn) {
-    let filePathRegexp = new RegExp('^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))');
+
+function checkFilePath(fn, type) {
+    let anyFilePathRegexp = new RegExp('^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))');
+    let csvFilePathRegexp = new RegExp('^.*\.csv$');
+    let filePathRegexp = type.csv ? csvFilePathRegexp : anyFilePathRegexp;
     if(program.file && filePathRegexp.test(program.file)) {
         fn(program.file);
     } else if (program.file && !filePathRegexp.test(program.file)) {
@@ -46,6 +50,19 @@ function checkFilePath(fn) {
         process.exit(1);
     } else {
         console.error('File path should be spesified.');
+        process.exit(1);
+    }
+} 
+
+function checkDirPath(fn) {
+    let pathRegexp = new RegExp('/^(.+)/([^/]+)$/');
+    if(program.path && pathRegexp.test(program.path)) {
+        fn(program.path);
+    } else if (program.path && !pathRegexp.test(program.path)) {
+        console.error('Check the path to the dir.');
+        process.exit(1);
+    } else {
+        console.error('Dir path should be spesified.');
         process.exit(1);
     }
 } 
@@ -69,11 +86,16 @@ function transform(str) {
 }
 function outputFile(filePath) {
     const reader = fs.createReadStream(path.join(__dirname, filePath));
-    reader.on('error', (error) => { console.log(error) });
     reader.pipe(process.stdout);
 }
-function convertFromFile(filePath) { 
-    console.log('convertFromFile:', filePath);
+function convertFromFile(filePath) {
+    const reader = fs.createReadStream(path.join(__dirname, filePath));
+    const toObject = csvjson.stream.toObject();
+    const stringify = csvjson.stream.stringify();
+
+    reader.on('error', (error) => { console.log(error) });
+
+    reader.pipe(toObject).pipe(stringify).pipe(process.stdout);
 }
 function convertToFile(filePath) { 
     console.log('convertToFile:', filePath);
