@@ -1,5 +1,7 @@
 const program = require ('commander');
 const colors = require ('colors');
+const fs = require ('fs');
+const path = require ('path');
 
 program
     .version('0.0.1')
@@ -36,10 +38,10 @@ function checkArgsStr(fn) {
 } 
 
 function checkFilePath(fn) {
-    let pathRegexp = new RegExp('/^(.+)/([^/]+)$/');
-    if(program.file && pathRegexp.test(program.file)) {
+    let filePathRegexp = new RegExp('^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))');
+    if(program.file && filePathRegexp.test(program.file)) {
         fn(program.file);
-    } else if (program.file && !pathRegexp.test(program.file)) {
+    } else if (program.file && !filePathRegexp.test(program.file)) {
         console.error('Check the path to the file.');
         process.exit(1);
     } else {
@@ -65,8 +67,10 @@ function transform(str) {
 
     process.stdin.pipe(upperCaseTr).pipe(process.stdout);
 }
-function outputFile(filePath) { 
-    console.log('outputFile:', filePath);
+function outputFile(filePath) {
+    const reader = fs.createReadStream(path.join(__dirname, filePath));
+    reader.on('error', (error) => { console.log(error) });
+    reader.pipe(process.stdout);
 }
 function convertFromFile(filePath) { 
     console.log('convertFromFile:', filePath);
