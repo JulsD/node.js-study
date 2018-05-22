@@ -7,70 +7,46 @@ program
     .option('-a, --action <type>', 'Runs action of a given type')
     .option('-f, --file <filePath>', 'Used to pass file to some actions')
     .option('-p, --path <path>', 'Used to pass dir path to cssBundle action')
+    .arguments('[str]')
     .parse(process.argv);
-
+    
 if (!process.argv.slice(2).length) {
     program.outputHelp(addWarning);
 } 
-else if (program.action == 'reverse') {
-    let str = process.argv[3];
-    if (typeof str === 'string') {
-        reverse(str);
-    } else {
-        console.log('This action needs a string');
-    }
-} 
-else if (program.action == 'transform') {
-    let str = process.argv[3];
-    if (typeof str === 'string') {
-        transform(str);
-    } else {
-        console.log('This action needs a string');
-    }
-}
-else if (program.action == 'outputFile') {
-    if(program.file) {
-        outputFile(program.file);
-    } else {
-        console.log('File path should be spesified');
-    }
-}
-else if (program.action == 'convertFromFile') {
-    if(program.file) {
-        convertFromFile(program.file);
-    } else {
-        console.log('File path should be spesified');
-    }
-}
-else if (program.action == 'convertToFile') {
-    if(program.file) {
-        convertToFile(program.file);
-    } else {
-        console.log('File path should be spesified');
-    }
-} else {
-    console.log('Action doesn\'t exist');
-}
+else if (program.action == 'reverse') { checkArgsStr(reverse) }
+else if (program.action == 'transform') { checkArgsStr(transform) }
+else if (program.action == 'outputFile') { checkFilePath(outputFile) }
+else if (program.action == 'convertFromFile') { checkFilePath(convertFromFile) }
+else if (program.action == 'convertToFile') { checkFilePath(convertToFile) }
+else console.log('Action doesn\'t exist')
 
-  
+// Util functions:
 function addWarning(txt) {
     let warning = colors.red('\n  Wrong input: module was called without arguments. \n');
     return warning + txt;
 } 
 
+function checkArgsStr(fn) {
+    if (program.args.length > 0) {
+        fn(program.args.join(' '));
+    } else {
+        console.log('This action needs a string argument');
+    }
+} 
 
-// list of actions:
-function reverse(str) { 
-    // process.stdin.pipe(process.stdout);
-    // let stdin = process.stdin, stdout = process.stdout;
+function checkFilePath(fn) {
+    if(program.file) {
+        fn(program.file);
+    } else {
+        console.log('File path should be spesified');
+    }
+} 
 
-    // stdin.resume();
-    // stdin.setEncoding('utf8');
-
-    // stdin.on('data', function(str) {
-    //     stdout.write(str);
-    // });
-    console.log('reverse', str);
+// lLst of actions:
+function reverse(str) {
+    process.stdin.write(str);
+    process.stdout.on('data', (str) => process.stdout.write(str));
+    process.stdin.end();
 }
 function transform(str) { 
     console.log('transform');
