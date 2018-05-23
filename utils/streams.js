@@ -130,21 +130,21 @@ function cssBundle(dirPath) {
                 let readStream = fs.createReadStream(path.join(dirPath, file));
                 readStream.on('error', (error) => { console.log(error) });
                 combinedStream.append(readStream);
+                return file;
             });
         }
     });
 
-    combinedStream.pipe(writer);
+    combinedStream.append(request
+        .get('https://epa.ms/nodejs18-hw3-css')
+        .on('response', function(response) {
+          console.log(response.statusCode)
+          console.log(response.headers['content-type'])
+          console.log(response.data);
+        })
+        .on('error', function(err) {
+            console.log(err)
+        }))
 
-    // request
-    // .get('https://epa.ms/nodejs18-hw3-css')
-    // .on('response', function(response) {
-    //   console.log(response.statusCode)
-    //   console.log(response.headers['content-type'])
-    //   console.log(response.data);
-    // })
-    // .on('error', function(err) {
-    //     console.log(err)
-    // })
-    // .pipe(writer);
+    combinedStream.pipe(writer);
 }
