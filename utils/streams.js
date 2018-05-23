@@ -21,6 +21,7 @@ else if (program.action == 'transform') { checkArgsStr(transform) }
 else if (program.action == 'outputFile') { checkFilePath(outputFile) }
 else if (program.action == 'convertFromFile') { checkFilePath(convertFromFile, {csv: true}) }
 else if (program.action == 'convertToFile') { checkFilePath(convertToFile, {csv: true}) }
+else if (program.action == 'cssBundle') { checkDirPath(cssBundle) }
 else console.log('Action doesn\'t exist')
 
 // Util functions:
@@ -38,7 +39,6 @@ function checkArgsStr(fn) {
     }
 } 
 
-
 function checkFilePath(fn, type) {
     let anyFilePathRegexp = new RegExp('^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))');
     let csvFilePathRegexp = new RegExp('^.*\.csv$');
@@ -55,7 +55,7 @@ function checkFilePath(fn, type) {
 } 
 
 function checkDirPath(fn) {
-    let pathRegexp = new RegExp('/^(.+)/([^/]+)$/');
+    let pathRegexp = new RegExp('^(.+)/([^/]+)$');
     if(program.path && pathRegexp.test(program.path)) {
         fn(program.path);
     } else if (program.path && !pathRegexp.test(program.path)) {
@@ -109,4 +109,53 @@ function convertToFile(filePath) {
     writer.on('error', (error) => { console.log(error) });
 
     reader.pipe(toObject).pipe(stringify).pipe(writer);
+}
+function cssBundle(dirPath) {
+    console.log('here')
+    let targetDirPath = path.resolve(__dirname, dirPath);
+
+    const { Duplex } = require('stream');
+
+    const myDuplex = new Duplex({
+        read() {
+            fs.readdir(targetDirPath, (err, files) => {
+                let filesCss;
+                if(err) throw err;
+                if (files && files.length > 0) {
+                    filesCss = files.filter((file) => file.slice(0, -3) == 'css')
+                    .map(file => {
+                        fs.readFile(path.join(targetDirPath, file), (err, results) => {
+                            if (err) console.error(err);
+    
+                            this.push(results.join("\n"));
+                        });
+                        
+                    });
+                }
+            });
+        },
+        write(chunk, encoding, callback) {
+            var request = require('request');
+            request.get('https://epa.ms/nodejs18-hw3-css', function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    Buffer.concat(body);
+                } else {
+                    console.error(error);
+                }
+            });
+            callback();
+        }
+    });
+
+    
+
+    myDuplex.read();
+    myDuplex.write('h');
+
+    const filePath = path.resolve(__dirname, targetDirPath) + '/bundle.css';
+    const writer = fs.createWriteStream(filePath);
+
+    writer.on('error', (error) => { console.log(error) });
+
+    myDuplex.pipe(writer);
 }
