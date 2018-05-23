@@ -3,6 +3,7 @@ const colors = require ('colors');
 const fs = require ('fs');
 const path = require ('path');
 const csvjson = require('csvjson');
+const request = require('request');
 
 program
     .version('0.0.1')
@@ -111,51 +112,61 @@ function convertToFile(filePath) {
     reader.pipe(toObject).pipe(stringify).pipe(writer);
 }
 function cssBundle(dirPath) {
-    console.log('here')
+
     let targetDirPath = path.resolve(__dirname, dirPath);
 
-    const { Duplex } = require('stream');
+    // const { Duplex } = require('stream');
 
-    const myDuplex = new Duplex({
-        read() {
-            fs.readdir(targetDirPath, (err, files) => {
-                let filesCss;
-                if(err) throw err;
-                if (files && files.length > 0) {
-                    filesCss = files.filter((file) => file.slice(0, -3) == 'css')
-                    .map(file => {
-                        fs.readFile(path.join(targetDirPath, file), (err, results) => {
-                            if (err) console.error(err);
+    // const myDuplex = new Duplex({
+    //     read() {
+    //         fs.readdir(targetDirPath, (err, files) => {
+    //             let filesCss;
+    //             if(err) throw err;
+    //             if (files && files.length > 0) {
+    //                 filesCss = files.filter((file) => file.slice(0, -3) == 'css')
+    //                 .map(file => {
+    //                     fs.readFile(path.join(targetDirPath, file), (err, results) => {
+    //                         if (err) console.error(err);
     
-                            this.push(results.join("\n"));
-                        });
+    //                         this.push(results.join("\n"));
+    //                     });
                         
-                    });
-                }
-            });
-        },
-        write(chunk, encoding, callback) {
-            var request = require('request');
-            request.get('https://epa.ms/nodejs18-hw3-css', function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    Buffer.concat(body);
-                } else {
-                    console.error(error);
-                }
-            });
-            callback();
-        }
-    });
+    //                 });
+    //             }
+    //         });
+    //     },
+    //     write(chunk, encoding, callback) {
+    //         var request = require('request');
+    //         request.get('https://epa.ms/nodejs18-hw3-css', function (error, response, body) {
+    //             if (!error && response.statusCode == 200) {
+    //                 Buffer.concat(body);
+    //             } else {
+    //                 console.error(error);
+    //             }
+    //         });
+    //         callback();
+    //     }
+    // });
 
     
 
-    myDuplex.read();
-    myDuplex.write('h');
+    // myDuplex.read();
+    // myDuplex.write('h');
 
     const filePath = path.resolve(__dirname, targetDirPath) + '/bundle.css';
     const writer = fs.createWriteStream(filePath);
 
     writer.on('error', (error) => { console.log(error) });
 
-    myDuplex.pipe(writer);
+    request
+    .get('https://epa.ms/nodejs18-hw3-css')
+    .on('response', function(response) {
+      console.log(response.statusCode)
+      console.log(response.headers['content-type'])
+      console.log(response.headers);
+    })
+    .on('error', function(err) {
+        console.log(err)
+    })
+    .pipe(writer);
 }
