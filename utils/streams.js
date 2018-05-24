@@ -70,6 +70,8 @@ function checkDirPath(fn) {
 
 // lLst of actions:
 function reverse(str) {
+    // if it is not needed to put str from comand line attrs
+    // process.stdin.pipe(process.stdout);
     process.stdin.write(str);
     process.stdout.on('data', (str) => process.stdout.write(str));
     process.stdin.end();
