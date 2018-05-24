@@ -130,30 +130,17 @@ function cssBundle(dirPath) {
 
     writer.on('error', (error) => { console.log(error) });
 
-    fs.readdir(dirPath, (err, files) => {
-        if(err) throw err;
-        if (files && files.length > 0) {
-            let cssSrt = files.filter((file) => {
-                return file.slice(-3) == 'css'}
-            ).map(file => {
-                let readStream = fs.createReadStream(path.join(dirPath, file));
-                readStream.on('error', (error) => { console.log(error) });
-                combinedStream.append(readStream);
-                return file;
-            });
-        }
+    fs.readdirSync(dirPath)
+        .filter((fileName) => fileName.slice(-4) == '.css')
+        .forEach((fileName) => {
+        combinedStream.append(fs.createReadStream(path.join(dirPath, fileName)))
     });
 
     combinedStream.append(request
         .get('https://epa.ms/nodejs18-hw3-css')
-        .on('response', function(response) {
-          console.log(response.statusCode)
-          console.log(response.headers['content-type'])
-          console.log(response.data);
-        })
         .on('error', function(err) {
             console.log(err)
-        }))
+        }));
 
     combinedStream.pipe(writer);
 }
