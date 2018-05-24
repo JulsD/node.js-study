@@ -77,6 +77,11 @@ function reverse(str) {
     process.stdin.end();
 }
 function transform(str) {
+    const Readable = require('stream').Readable
+    const reader = new Readable;
+    reader.push(str);
+    reader.push(null);
+
     const { Transform } = require('stream');
     const upperCaseTr = new Transform({
         transform(chunk, encoding, callback) {
@@ -85,7 +90,7 @@ function transform(str) {
         }
     });
 
-    process.stdin.pipe(upperCaseTr).pipe(process.stdout);
+    reader.pipe(upperCaseTr).pipe(process.stdout);
 }
 function outputFile(filePath) {
     const reader = fs.createReadStream(path.join(__dirname, filePath));
@@ -104,8 +109,10 @@ function convertFromFile(filePath) {
 function convertToFile(filePath) { 
     const fileName = path.basename(filePath).slice(0, -4) + '.json';
     const dirPath = path.resolve(__dirname, (path.dirname(filePath)));
+
     const reader = fs.createReadStream(path.join(__dirname, filePath));
     const writer = fs.createWriteStream(dirPath + '/' + fileName);
+
     const toObject = csvjson.stream.toObject();
     const stringify = csvjson.stream.stringify();
 
