@@ -25,18 +25,21 @@ function templateEngine(template, data) {
   };
 
 http.createServer()
-    .on('request', function (req, res) {
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      fs.createReadStream(path.resolve(__dirname, 'index.html'))
-        .on('data', function(chunk){
-          res.write(templateEngine(chunk.toString(), {message: 'Hello World! My message is HERE!'}))
-        })
-        .on('end', function(){
-          res.end();
-        })
-        .on('error', function(error){
-          re.statusCode = 404;
-          res.end(error);
-        });
+    .on('request', (req, res) => {
+      let {method} = req;
+      if(method === 'GET') {
+        fs.createReadStream(path.resolve(__dirname, 'index.html'))
+          .on('data', (chunk) => {
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write(templateEngine(chunk.toString(), {message: 'Hello World! My message is HERE!'}))
+          })
+          .on('end', () => {
+            res.end();
+          })
+          .on('error', (error) => {
+            re.statusCode = 404;
+            res.end(error);
+          });
+      }
     })
     .listen(8080); 
