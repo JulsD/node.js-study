@@ -24,11 +24,13 @@ function templateEngine(template, data) {
     return output;
   };
 
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
+http.createServer()
+    .on('request', function (req, res) {
+      res.writeHead(200, {'Content-Type': 'text/html'});
 
-    let template = fs.readFileSync(path.resolve(__dirname, 'index.html'));
+      let template = fs.readFileSync(path.resolve(__dirname, 'index.html'));
 
-    res.write(templateEngine(template.toString(), {message: 'Hello World! My message is HERE!'}));
-    res.end();
-}).listen(8080); 
+      res.write(templateEngine(template.toString(), {message: 'Hello World! My message is HERE!'}));
+      res.end();
+    })
+    .listen(8080); 
