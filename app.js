@@ -1,7 +1,11 @@
-import config from './config/app.config.json';
-import { User, Product } from './models';
+// import config from './config/app.config.json';
+// import { User, Product } from './models';
+// console.log(config.name);
+// const User_1 = new User();
+// const Product_1 = new Product();
 
-console.log(config.name);
+const express = require('express');
+const app = express();
+app.get('/', (req, res) => res.send('Hello World!'))
 
-const User_1 = new User();
-const Product_1 = new Product();
+module.exports = app;
