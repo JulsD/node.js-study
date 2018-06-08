@@ -1,19 +1,11 @@
-import config from './config/app.config.json';
-import { User, Product } from './models';
-import { defaultRouter } from './routes';
+// import config from './config/app.config.json';
+// import { User, Product } from './models';
+// console.log(config.name);
+// const User_1 = new User();
+// const Product_1 = new Product();
 
-console.log(config.name);
-
-const User_1 = new User();
-const Product_1 = new Product();
-
-import express from 'express';
-import cookieParser from 'cookie-parser';
-
+const express = require('express');
 const app = express();
+app.get('/', (req, res) => res.send('Hello World!'))
 
-app.use(express.json());
-
-app.use('/', defaultRouter);
-
-export default app;
+module.exports = app;
