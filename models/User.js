@@ -1,6 +1,10 @@
 class User {
-    constructor() {
-        console.log("User module");
+    constructor(users) {
+        this.users = users? users : [];
+    }
+
+    fetchAll() {
+        return this.users;
     }
 }
 
