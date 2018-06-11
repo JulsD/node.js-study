@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "lodash": "^4.17.10"
   }
 }
