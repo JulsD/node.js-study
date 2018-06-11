@@ -1,11 +1,7 @@
-import products from './products';
-import product from './product';
-import reviews from './reviews';
-import users from './users';
+import productRouter from './productRouter';
+import userRouter from './userRouter';
 
 export {
-    products,
-    product,
-    reviews,
-    users
+    productRouter,
+    userRouter
 }

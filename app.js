@@ -1,18 +1,14 @@
-// import config from './config/app.config.json';
-// import { User, Product } from './models';
-// console.log(config.name);
-// const User_1 = new User();
-// const Product_1 = new Product();
+import config from './config/app.config.json';
+console.log(config.name);
 
-import express from('express');
-import { product, products, reviews, users } from 'routes';
+import express from 'express';
+import { productRouter, userRouter } from './routes';
 
 const app = express();
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.use('/api/products/:id/reviews', reviews);
-app.use('/api/products/:id', product);
-app.use('/api/products', products);
-app.use('/api/users', users);
+app.use(express.json());
+app.use(productRouter);
+app.use(userRouter);
 
 export default app;
