@@ -4,7 +4,8 @@
   "description": "study",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --exec node -r babel-register app.js",
+    "start": "node -r babel-register index.js",
+    "start:serve": "nodemon --exec node -r babel-register app.js",
     "test": ""
   },
   "repository": {
@@ -23,5 +24,10 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "lodash": "^4.17.10"
   }
 }
