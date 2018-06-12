@@ -1,5 +1,6 @@
 const cookieParser = require('cookie-parser');
-module.exports = function(options) {
+
+export default function(options) {
     return function(req, res, next) {
         req.parsedCookies = cookieParser(options);
         next()

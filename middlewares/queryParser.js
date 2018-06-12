@@ -1,7 +1,11 @@
 const querystring = require('querystring');
-module.exports = function(query) {
-    return function(req, res, next) {
-        req.parsedQuery = querystring.parse(query);
-        next()
+
+let queryParser = function(req, res, next) {
+    if(req.url.indexOf('?') >=0) {
+        req.parsedQuery = querystring.parse(req.url.slice(req.url.indexOf('?') + 1));
     }
-  }
+    console.log('parsedQuery', req.parsedQuery);
+    next()
+}
+
+export default queryParser;
