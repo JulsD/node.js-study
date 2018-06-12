@@ -20,9 +20,6 @@ app.get('/clear-cookie',function(req, res, next){
 });
 app.get('/get-cookie', cookieLog);
 
-app.use(queryParser);
-app.use(cookieParser);
-app.use(productRouter);
-app.use(userRouter);
+app.use(queryParser, cookieParser, productRouter, userRouter);
 
 export default app;
