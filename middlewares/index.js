@@ -1,7 +1,8 @@
 import queryParser from './queryParser';
-import cookieParser from './cookieParser';
+import { cookieParser, cookieLog } from './cookieParser';
 
 export {
     queryParser,
-    cookieParser
+    cookieParser,
+    cookieLog
 }
