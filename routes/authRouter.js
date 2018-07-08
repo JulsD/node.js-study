@@ -21,9 +21,19 @@ authRouter.post('/auth/local', passport.authenticate('local', {session:false}), 
 
 authRouter.get('/auth/facebook', passport.authenticate('facebook'));
 
-authRouter.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/login' }));
+authRouter.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+    successRedirect: '/', failureRedirect: '/login'
+}));
+
+authRouter.get('/auth/google', passport.authenticate('google', { 
+    scope: 'https://www.google.com/m8/feeds'
+}));
+
+authRouter.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/login'
+}), function(req, res) {
+    res.redirect('/');
+});
 
 authRouter.route('/auth').post((req, res) => {
     const user = find(loginBase, {login: req.body.login, password: req.body.password});
