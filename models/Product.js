@@ -1,4 +1,4 @@
-import { find } from 'lodash';
+import { find, floor } from 'lodash';
 
 class Product {
     constructor(products) {
@@ -25,7 +25,7 @@ class Product {
     }
 
     createId() {
-        let newId = Math.random()*10;
+        let newId = floor(Math.random()*10);
         if(find(this.products, { id: newId})) {
             this.createId();
         }

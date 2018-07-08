@@ -3,7 +3,7 @@ console.log(config.name);
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { productRouter, userRouter } from './routes';
+import { authRouter, productRouter, userRouter } from './routes';
 import { queryParser, cookieParser, cookieLog } from './middlewares'
 
 const app = express();
@@ -21,6 +21,9 @@ app.get('/clear-cookie',function(req, res, next){
 });
 app.get('/get-cookie', cookieLog);
 
-app.use(bodyParser.json(), queryParser, cookieParser, productRouter, userRouter);
+app.use(
+    bodyParser.json(), queryParser, cookieParser, 
+    authRouter, productRouter, userRouter
+);
 
 export default app;

@@ -33,7 +33,6 @@ function errorResponse(schemaErrors) {
 
 const validateProductSchema = (req, res, next) => {
     let isValid = ajv.validate(newProductSchema, req.body);
-    console.log(isValid);
     if(!isValid) {
         res.status(400).json(errorResponse(ajv.errors));
     } else {
