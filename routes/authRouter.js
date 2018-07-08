@@ -1,15 +1,25 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { find } from 'lodash';
-const authRouter = express.Router();
-
-// import passport from 'passport';
+import passport from 'passport';
 
 import loginBase from '../data/users.json';
 
-// authRouter.post('/auth/local', passport.authenticate('local', {failureFlash: true, session:false}));
+const authRouter = express.Router();
 
-authRouter.post('/auth', (req, res) => {
+authRouter.post('/auth/local', passport.authenticate('local', {session:false}), (req, res) => {
+    const user = find(loginBase, {login: req.body.login, password: req.body.password});
+    let data = {
+        "user": {
+            "email": user.email,
+            "username": user.username
+        }
+    }
+    let token = jwt.sign(data, 'someSecret', {expiresIn: 60});
+    res.status(200).send({ "message": "OK", data, "token": token});
+});
+
+authRouter.route('/auth').post((req, res) => {
     const user = find(loginBase, {login: req.body.login, password: req.body.password});
     if(!user) {
         const isLoginInBase = find(loginBase, {login: req.body.login});

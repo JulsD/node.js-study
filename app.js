@@ -3,10 +3,18 @@ console.log(config.name);
 
 import express from 'express';
 import bodyParser from 'body-parser';
+
+import passport from 'passport';
+import passportConfig from './config/passport.config';
+
+passportConfig(passport);
+
+// import { authRouter, productRouter, userRouter } from './routes';
 import { authRouter, productRouter, userRouter } from './routes';
 import { queryParser, cookieParser, cookieLog } from './middlewares'
 
 const app = express();
+app.use(passport.initialize());
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
