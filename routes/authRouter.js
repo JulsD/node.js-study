@@ -39,7 +39,7 @@ authRouter.route('/auth').post(function (req, res) {
                 "username": user.username
             }
         }
-        let token = jwt.sign(data, 'someSecret', {expiresIn: 10});
+        let token = jwt.sign(data, 'someSecret', {expiresIn: 60});
         res.status(200).send({ "message": "OK", data, "token": token});
     }
 });
