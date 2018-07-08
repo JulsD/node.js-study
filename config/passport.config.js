@@ -1,6 +1,8 @@
 import {Strategy as LocalStrategy } from 'passport-local';
+import {Strategy as FacebookStrategy } from 'passport-facebook';
 import { find } from 'lodash';
 import loginBase from '../data/users.json';
+import credentials from '../data/credentials';
 
 export default function(passport) {
 
@@ -25,6 +27,20 @@ export default function(passport) {
         if ( user === undefined || user.password !== password) {
             return done(null, false, 'Bad user login name or password.');
         } else {
+            return done(null, user);
+        }
+    }));
+
+    passport.use(new FacebookStrategy({
+        clientID: credentials.FACEBOOK_APP_ID,
+        clientSecret: credentials.FACEBOOK_APP_SECRET,
+        callbackURL: "http://localhost:8080/auth/facebook/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        let user = find(loginBase, {"login": login});
+        if ( user === undefined || user.password !== password) { 
+            return done(null, false, 'Bad user login name or password.');
+        }else {
             return done(null, user);
         }
     }));

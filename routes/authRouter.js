@@ -19,6 +19,12 @@ authRouter.post('/auth/local', passport.authenticate('local', {session:false}), 
     res.status(200).send({ "message": "OK", data, "token": token});
 });
 
+authRouter.get('/auth/facebook', passport.authenticate('facebook'));
+
+authRouter.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { successRedirect: '/',
+                                      failureRedirect: '/login' }));
+
 authRouter.route('/auth').post((req, res) => {
     const user = find(loginBase, {login: req.body.login, password: req.body.password});
     if(!user) {
