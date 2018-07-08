@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 const productRouter = express.Router();
 import { Product } from '../models';
 
@@ -26,7 +27,7 @@ productRouter.route('/api/products')
         .get((req, res) => {
             res.json(myProducts.fetchAll());
         })
-        .post(function (req, res) {
+        .post(bodyParser.json(), function (req, res) {
             res.json(myProducts.add(req.body));
         });
 
