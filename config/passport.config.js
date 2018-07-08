@@ -1,6 +1,8 @@
 import {Strategy as LocalStrategy } from 'passport-local';
 import {Strategy as FacebookStrategy } from 'passport-facebook';
 import {OAuthStrategy as GoogleStrategy } from 'passport-google-oauth';
+import {OAuthStrategy as TwitterStrategy } from 'passport-twitter';
+
 import { find } from 'lodash';
 import loginBase from '../data/users.json';
 import credentials from '../data/credentials';
@@ -55,7 +57,22 @@ export default function(passport) {
         let user = find(loginBase, {"login": login});
         if ( user === undefined || user.password !== password) { 
             return done(null, false, 'Bad user login name or password.');
-        }else {
+        } else {
+            return done(null, user);
+        }
+      }
+    ));
+
+    passport.use(new TwitterStrategy({
+        consumerKey: credentials.TWITTER_CONSUMER_KEY,
+        consumerSecret: credentials.TWITTER_CONSUMER_SECRET,
+        callbackURL: "http://localhost:8080/auth/twitter/callback"
+      },
+      function(token, tokenSecret, profile, done) {
+        let user = find(loginBase, {"login": login});
+        if ( user === undefined || user.password !== password) { 
+            return done(null, false, 'Bad user login name or password.');
+        } else {
             return done(null, user);
         }
       }

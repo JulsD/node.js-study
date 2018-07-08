@@ -35,6 +35,12 @@ authRouter.get('/auth/google/callback', passport.authenticate('google', {
     res.redirect('/');
 });
 
+authRouter.get('/auth/twitter', passport.authenticate('twitter'));
+
+authRouter.get('/auth/twitter/callback', passport.authenticate('twitter', {
+    successRedirect: '/', failureRedirect: '/login'
+}));
+
 authRouter.route('/auth').post((req, res) => {
     const user = find(loginBase, {login: req.body.login, password: req.body.password});
     if(!user) {
