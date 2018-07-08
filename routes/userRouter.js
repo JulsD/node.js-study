@@ -1,12 +1,12 @@
 import express from 'express';
 const userRouter = express.Router();
 import { User } from '../models';
+import { tokenCheck } from '../middlewares';
+import usersMock from '../data/users.json';
 
-let myUsers = new User([
-    'Homer', 'Bart', 'Lisa', 'Marge'
-])
+let myUsers = new User(usersMock);
 
-userRouter.get('/api/users', (req, res) => {
+userRouter.get('/api/users', tokenCheck, (req, res) => {
         res.json(myUsers.fetchAll());
     });
 

@@ -2,30 +2,18 @@ import express from 'express';
 
 const productRouter = express.Router();
 import { Product } from '../models';
-import { validateProductSchema } from '../middlewares';
+import { validateProductSchema, tokenCheck } from '../middlewares';
+import productsMock from '../data/products.json'
 
-let myProducts = new Product([
-    {
-        id: 1,
-        name: '1productName',
-        color: 'red',
-        reviews: ['good', 'perfect', 'smart']
-    },
-    {
-        id: 2,
-        name: '2productName',
-        color: 'blue',
-        reviews: ['hard to understand', 'small']
-    }
-]);
+let myProducts = new Product(productsMock);
 
 productRouter.param('id', function(req, res, next, id) {
     req.productId = id;
     next();
 })
 
-productRouter.route('/api/products')
-        .get((req, res) => {
+productRouter.route('/api/products', )
+        .get(tokenCheck, (req, res) => {
             res.json(myProducts.fetchAll());
         })
         .post(validateProductSchema, function (req, res) {
@@ -33,13 +21,12 @@ productRouter.route('/api/products')
         });
 
 productRouter.route('/api/products/:id')
-
-        .get((req, res) => {
+        .get(tokenCheck, (req, res) => {
             res.json(myProducts.get(req.productId));
         });
         
 productRouter.route('/api/products/:id/reviews')
-        .get((req, res) => {
+        .get(tokenCheck, (req, res) => {
             res.json(myProducts.get(req.productId).reviews);
         });
         
