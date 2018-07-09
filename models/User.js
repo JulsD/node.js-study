@@ -9,12 +9,22 @@ class User {
         return this.users;
     }
 
-    findUserByLoginNmae(loginName) {
-        let user = find(this.users, function(o){ return o.login == loginName });
+    findUser(data) {
+        let user = find(this.users, data);
         if(user) {
             return user;
         } else {
-            return {"user": "doesn't exist"}
+            return null;
+        }
+    }
+
+    findOrCreateUser(data) {
+        let user = find(this.users, data);
+        if(user) {
+            return user;
+        } else {
+            this.users.push(data);
+            return data;
         }
     }
 }

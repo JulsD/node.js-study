@@ -22,8 +22,8 @@ authRouter.post('/auth/local', passport.authenticate('local', {session:false}), 
 authRouter.get('/auth/facebook', passport.authenticate('facebook'));
 
 authRouter.get('/auth/facebook/callback', passport.authenticate('facebook', { 
-    successRedirect: '/', failureRedirect: '/login'
-}));
+    failureRedirect: '/auth/facebook'
+}), (req, res) => { res.redirect('/') });
 
 authRouter.get('/auth/google', passport.authenticate('google', { 
     scope: 'https://www.google.com/m8/feeds'

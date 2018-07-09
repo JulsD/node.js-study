@@ -5,19 +5,20 @@ import {OAuthStrategy as TwitterStrategy } from 'passport-twitter';
 
 import { find } from 'lodash';
 import loginBase from '../data/users.json';
+import { User } from '../models';
 import credentials from '../data/credentials';
+
+let myUsers = new User(loginBase);
 
 export default function(passport) {
 
-    // passport.serializeUser(function(user, done) {
-    //     done(null, user.id);
-    // });
-
-    // passport.deserializeUser(function(id, done) {
-    //     User.findById(id, function(err, user) {
-    //         done(err, user);
-    //     });
-    // });
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+      
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+    });
 
     passport.use(new LocalStrategy({
         usernameField : 'login',
@@ -40,10 +41,10 @@ export default function(passport) {
         callbackURL: "http://localhost:8080/auth/facebook/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        let user = find(loginBase, {"login": login});
-        if ( user === undefined || user.password !== password) { 
+        let user = myUsers.findOrCreateUser({"login": profile._json.name});
+        if (user === undefined) { 
             return done(null, false, 'Bad user login name or password.');
-        }else {
+        } else {
             return done(null, user);
         }
     }));
