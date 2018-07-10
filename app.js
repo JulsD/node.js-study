@@ -9,9 +9,8 @@ import passportConfig from './config/passport.config';
 
 passportConfig(passport);
 
-// import { authRouter, productRouter, userRouter } from './routes';
 import { authRouter, productRouter, userRouter } from './routes';
-import { queryParser, cookieParser, cookieLog } from './middlewares'
+import { queryParser, cookieParser, cookieLog } from './middlewares';
 
 const app = express();
 app.use(passport.initialize());

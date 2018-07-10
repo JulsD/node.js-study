@@ -5,10 +5,7 @@ import {OAuthStrategy as TwitterStrategy } from 'passport-twitter';
 
 import { find } from 'lodash';
 import loginBase from '../data/users.json';
-import { User } from '../models';
 import credentials from '../data/credentials';
-
-let myUsers = new User(loginBase);
 
 export default function(passport) {
 
@@ -41,7 +38,7 @@ export default function(passport) {
         callbackURL: "http://localhost:8080/auth/facebook/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        let user = myUsers.findOrCreateUser({"login": profile._json.name});
+        let user = find(loginBase, {"login": profile._json.name});
         if (user === undefined) { 
             return done(null, false, 'Bad user login name or password.');
         } else {
