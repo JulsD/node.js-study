@@ -1,9 +1,5 @@
 export default (sequelize, DataTypes) => {
     const User = sequelize.define('user', {
-        // id: {
-        //     type: DataTypes.UUID,
-        //     unique: true
-        // },
         login: {
             type: DataTypes.STRING,
             unique: true

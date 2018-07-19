@@ -4,7 +4,7 @@ import {OAuthStrategy as GoogleStrategy } from 'passport-google-oauth';
 import {OAuthStrategy as TwitterStrategy } from 'passport-twitter';
 
 import { find } from 'lodash';
-import loginBase from '../data/users.json';
+import models from '../models';
 import credentials from '../data/credentials';
 
 export default function(passport) {
@@ -23,13 +23,13 @@ export default function(passport) {
         session: false
     },
     function(login, password, done) {
-        let user = find(loginBase, {"login": login});
-
-        if ( user === undefined || user.password !== password) {
-            return done(null, false, 'Bad user login name or password.');
-        } else {
-            return done(null, user);
-        }
+        models.user.findOne({"login": login}).then(user => {
+            if ( user === undefined || user.password !== password) {
+                return done(null, false, 'Bad user login name or password.');
+            } else {
+                return done(null, user);
+            }
+        });
     }));
 
     passport.use(new FacebookStrategy({
@@ -38,12 +38,13 @@ export default function(passport) {
         callbackURL: "http://localhost:8080/auth/facebook/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        let user = find(loginBase, {"login": profile._json.name});
-        if (user === undefined) { 
-            return done(null, false, 'Bad user login name or password.');
-        } else {
-            return done(null, user);
-        }
+        models.user.findOne({"login": profile._json.name}).then(user => {
+            if (user === undefined) { 
+                return done(null, false, 'Bad user login name or password.');
+            } else {
+                return done(null, user);
+            }
+        });
     }));
 
     passport.use(new GoogleStrategy({
@@ -52,12 +53,13 @@ export default function(passport) {
         callbackURL: "http://localhost:8080/auth/google/callback"
       },
       function(token, tokenSecret, profile, done) {
-        let user = find(loginBase, {"login": login});
-        if ( user === undefined || user.password !== password) { 
-            return done(null, false, 'Bad user login name or password.');
-        } else {
-            return done(null, user);
-        }
+        models.user.findOne({"login": login}).then(user => {
+            if ( user === undefined || user.password !== password) { 
+                return done(null, false, 'Bad user login name or password.');
+            } else {
+                return done(null, user);
+            }
+        });
       }
     ));
 
@@ -67,12 +69,13 @@ export default function(passport) {
         callbackURL: "http://localhost:8080/auth/twitter/callback"
       },
       function(token, tokenSecret, profile, done) {
-        let user = find(loginBase, {"login": login});
-        if ( user === undefined || user.password !== password) { 
-            return done(null, false, 'Bad user login name or password.');
-        } else {
-            return done(null, user);
-        }
+        models.user.findOne({"login": login}).then(user => {
+            if ( user === undefined || user.password !== password) { 
+                return done(null, false, 'Bad user login name or password.');
+            } else {
+                return done(null, user);
+            }
+        });
       }
     ));
 
