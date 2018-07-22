@@ -1,32 +1,24 @@
-import { find } from 'lodash';
+export default (sequelize, DataTypes) => {
+  const User = sequelize.define('user', {
+      login: {
+          type: DataTypes.STRING,
+          unique: true
+      },
+      password: {
+          type: DataTypes.STRING
+      },
+      email: {
+          type: DataTypes.STRING,
+          unique: true
+      },
+      username: {
+          type: DataTypes.STRING
+      }
+  });
 
-class User {
-    constructor(users) {
-        this.users = users? users : [];
-    }
+  User.associate = function(models) {
+    // associations can be defined here
+  };
 
-    fetchAll() {
-        return this.users;
-    }
-
-    findUser(data) {
-        let user = find(this.users, data);
-        if(user) {
-            return user;
-        } else {
-            return null;
-        }
-    }
-
-    findOrCreateUser(data) {
-        let user = find(this.users, data);
-        if(user) {
-            return user;
-        } else {
-            this.users.push(data);
-            return data;
-        }
-    }
+  return User;
 }
-
-export default User;

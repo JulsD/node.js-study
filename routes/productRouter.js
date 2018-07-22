@@ -1,33 +1,42 @@
 import express from 'express';
 
 const productRouter = express.Router();
-import { Product } from '../models';
-import { validateProductSchema, tokenCheck } from '../middlewares';
-import productsMock from '../data/products.json'
-
-let myProducts = new Product(productsMock);
+import models from '../models';
+import { tokenCheck } from '../middlewares';
 
 productRouter.param('id', function(req, res, next, id) {
     req.productId = id;
     next();
-})
+});
 
 productRouter.route('/api/products', )
-        .get(tokenCheck, (req, res) => {
-            res.json(myProducts.fetchAll());
+    .get(tokenCheck, (req, res) => {
+        models.product.findAll().then(products => {
+            res.json(products);
         })
-        .post(validateProductSchema, function (req, res) {
-            res.json(myProducts.add(req.body));
+    })
+    .post(tokenCheck, (req, res) => {
+        models.product
+        .findOrCreate({where: req.body, defaults: {reviews: ['Technical prod']}})
+        .spread((product, created) => {
+            res.json(product.get({
+                plain: true
+            }))
         });
+    });
 
 productRouter.route('/api/products/:id')
         .get(tokenCheck, (req, res) => {
-            res.json(myProducts.get(req.productId));
+            models.product.findById(req.productId).then(productItem => {
+                res.json(productItem);
+            })
         });
         
 productRouter.route('/api/products/:id/reviews')
         .get(tokenCheck, (req, res) => {
-            res.json(myProducts.get(req.productId).reviews);
+            models.product.findById(req.productId).then(productItem => {
+                res.json(productItem.reviews);
+            })
         });
         
 export default productRouter;
