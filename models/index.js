@@ -5,8 +5,8 @@ const sequelize = new Sequelize('nodestudy', 'postgres', 'postgress', {
 });
 
 const models = {
-    user: sequelize.import('./User.js'),
-    product: sequelize.import('./Product.js')
+    user: sequelize.import('./user.js'),
+    product: sequelize.import('./product.js')
 };
 
 models.sequelize = sequelize;
