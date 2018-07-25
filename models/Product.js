@@ -1,36 +1,11 @@
-import { find } from 'lodash';
+import mongoose from 'mongoose';
 
-class Product {
-    constructor(products) {
-        this.products = products? products : [];
-    }
+const productSchema = new mongoose.Schema({
+    name: String,
+    color: String,
+    reviews: [String]
+  });
 
-    add(product) {
-        let newId = this.createId();
-        product.id = newId;
-        return this.products.push(product);
-    }
-
-    get(productID) {
-        let product = find(this.products, function(o){ return o.id == productID });
-        if(product) {
-            return product;
-        } else {
-            return {"product": "doesn't exist"}
-        }
-    }
-
-    fetchAll() {
-        return this.products;
-    }
-
-    createId() {
-        let newId = Math.random()*10;
-        if(find(this.products, { id: newId})) {
-            this.createId();
-        }
-        return newId;
-    }
-}
+const Product = mongoose.model('Product', productSchema);
 
 export default Product;

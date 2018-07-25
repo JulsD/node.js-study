@@ -1,11 +1,12 @@
-class User {
-    constructor(users) {
-        this.users = users? users : [];
-    }
+import mongoose from 'mongoose';
 
-    fetchAll() {
-        return this.users;
-    }
-}
+const userSchema = new mongoose.Schema({
+    username: String,
+    email: String,
+    password: String,
+    age: Number
+  });
+
+const User = mongoose.model('User', userSchema);
 
 export default User;
