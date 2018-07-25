@@ -2,21 +2,6 @@ import express from 'express';
 const productRouter = express.Router();
 import { Product } from '../models';
 
-let myProducts = new Product([
-    {
-        id: 1,
-        name: '1productName',
-        color: 'red',
-        reviews: ['good', 'perfect', 'smart']
-    },
-    {
-        id: 2,
-        name: '2productName',
-        color: 'blue',
-        reviews: ['hard to understand', 'small']
-    }
-]);
-
 productRouter.param('id', function(req, res, next, id) {
     req.productId = id;
     next();
@@ -24,7 +9,10 @@ productRouter.param('id', function(req, res, next, id) {
 
 productRouter.route('/api/products')
         .get((req, res) => {
-            res.json(myProducts.fetchAll());
+            Product.find(function (err, results) {
+                if (err) return console.error(err);
+                res.json(results);
+            })
         })
         .post(function (req, res) {
             res.json(myProducts.add(req.body));
