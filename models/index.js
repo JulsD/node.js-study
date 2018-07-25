@@ -1,18 +1,16 @@
+import mongoose from 'mongoose';
+
 import User from './User';
 import Product from './Product';
+import City from './City';
 
-import { MongoClient } from 'mongodb';
-
-const connectDB = (cb) => {
-    MongoClient.connect('mongodb://localhost:27017/mydb', function (err, client) {
-        if (err) cb(err)
-        cb(null, client.db('mydb'))
-    });
-}
-
+mongoose.connect('mongodb://localhost:27017/mydb');
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() { console.log('we are connected!') });
 
 export {
     User,
     Product,
-    connectDB
+    City
 }

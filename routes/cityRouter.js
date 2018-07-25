@@ -1,16 +1,12 @@
 import express from 'express';
 const cityRouter = express.Router();
-import { connectDB } from '../models';
+import { City } from '../models';
 
 cityRouter.route('/api/cities')
     .get((req, res) => {
-        connectDB((err, connection) => {
-            if (err) throw new Error(err);
-            connection.collection('cities').find().toArray(function (err, result) {
-                if (err) throw err
-            
-                res.send(result[Math.floor(Math.random()*result.length)]);
-            })
+        City.find(function (err, cities) {
+            if (err) return console.error(err);
+            res.send(cities[Math.floor(Math.random()*cities.length)]);
         })
         
     })

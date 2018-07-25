@@ -29,6 +29,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "lodash": "^4.17.10",
-    "mongodb": "^3.1.1"
+    "mongodb": "^3.1.1",
+    "mongoose": "^5.2.5"
   }
 }
