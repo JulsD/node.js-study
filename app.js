@@ -2,10 +2,19 @@ import config from './config/app.config.json';
 console.log(config.name);
 
 import express from 'express';
-import { productRouter, userRouter } from './routes';
+import bodyParser from 'body-parser';
+
+import passport from 'passport';
+import passportConfig from './config/passport.config';
+
+passportConfig(passport);
+
+// import { authRouter, productRouter, userRouter } from './routes';
+import { authRouter, productRouter, userRouter } from './routes';
 import { queryParser, cookieParser, cookieLog } from './middlewares'
 
 const app = express();
+app.use(passport.initialize());
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
@@ -20,6 +29,10 @@ app.get('/clear-cookie',function(req, res, next){
 });
 app.get('/get-cookie', cookieLog);
 
-app.use(queryParser, cookieParser, productRouter, userRouter);
+// parsers
+app.use(bodyParser.json(), queryParser, cookieParser);
+
+// middlevares for other rotes
+app.use(authRouter, productRouter, userRouter);
 
 export default app;

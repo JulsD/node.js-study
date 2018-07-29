@@ -1,0 +1,14 @@
+[
+    {
+        "id": "1",
+        "name": "1productName",
+        "color": "red",
+        "reviews": ["good", "perfect", "smart"]
+    },
+    {
+        "id": "2",
+        "name": "2productName",
+        "color": "blue",
+        "reviews": ["hard to understand", "small"]
+    }
+]

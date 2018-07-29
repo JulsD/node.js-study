@@ -1,0 +1,38 @@
+[
+    {
+        "login": "admin",
+        "password": "admin password",
+        "email": "admin@ad.min",
+        "username": "Admin"
+    }, {
+        "login": "test",
+        "password": "test password",
+        "email": "test@te.st",
+        "username": "Test"
+    }, {
+        "login": "Homer",
+        "password": "Homer password",
+        "email": "Homer@ho.mer",
+        "username": "Homer"
+    }, {
+        "login": "Bart",
+        "password": "Bart password",
+        "email": "Bart@ba.rt",
+        "username": "Bart"
+    }, {
+        "login": "Lisa",
+        "password": "Lisa password",
+        "email": "Lisa@li.sa",
+        "username": "Lisa"
+    }, {
+        "login": "Marge",
+        "password": "Marge password",
+        "email": "Marge@mar.ge",
+        "username": "Marge"
+    }, {
+        "login": "Maggy",
+        "password": "Maggy password",
+        "email": "Maggy@mag.gy",
+        "username": "Maggy"
+    }
+]
