@@ -2,6 +2,7 @@ import config from './config/app.config.json';
 console.log(config.name);
 
 import express from 'express';
+import bodyParser from 'body-parser';
 import { productRouter, userRouter, cityRouter } from './routes';
 import { queryParser, cookieParser, cookieLog } from './middlewares'
 
@@ -20,6 +21,6 @@ app.get('/clear-cookie',function(req, res, next){
 });
 app.get('/get-cookie', cookieLog);
 
-app.use(queryParser, cookieParser, productRouter, userRouter, cityRouter);
+app.use(bodyParser.json(), queryParser, cookieParser, productRouter, userRouter, cityRouter);
 
 export default app;
