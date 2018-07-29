@@ -24,6 +24,7 @@ userRouter.get('/api/users', (req, res) => {
                     password: doc.password,
                     age: doc.age,
                     _id: doc._id,
+                    lastModifiedDate: doc.lastModifiedDate,
                     request: {
                         type: 'GET',
                         url: `/api/users/${doc._id}`
@@ -55,6 +56,7 @@ userRouter.route('/api/users/:id')
                 password: user.password,
                 age: user.age,
                 _id: user._id,
+                lastModifiedDate: doc.lastModifiedDate,
                 request: {
                     type: 'DELETE',
                     url: `/api/users/${user._id}`,

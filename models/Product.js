@@ -11,7 +11,8 @@ const productSchema = new mongoose.Schema({
         type: String,
         reqired: true
     },
-    reviews: [String]
+    reviews: [String],
+    lastModifiedDate: Date
   });
 
 const Product = mongoose.model('Product', productSchema);
@@ -24,7 +25,8 @@ products.forEach(productData => {
                 _id: new mongoose.Types.ObjectId(),
                 name: productData.name,
                 color: productData.color,
-                reviews: productData.reviews
+                reviews: productData.reviews,
+                lastModifiedDate: Date.now()
             }); 
             newProduct.save( (err, newProduct) => {
                 if (err) return console.error(err);

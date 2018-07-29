@@ -15,8 +15,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         reqired: true
     },
-    age: Number
-  });
+    age: Number,
+    lastModifiedDate: Date
+});
 
 const User = mongoose.model('User', userSchema);
 
@@ -29,7 +30,8 @@ users.forEach(userData => {
                 username: user.username,
                 email: user.email,
                 password: user.password,
-                age: user.age
+                age: user.age,
+                lastModifiedDate: Date.now()
             }); 
             newUser.save( (err, newUser) => {
                 if (err) return console.error(err);

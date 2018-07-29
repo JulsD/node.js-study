@@ -62,6 +62,7 @@ productRouter.route('/api/products')
                 name: doc.name,
                 color: doc.color,
                 _id: doc._id,
+                lastModifiedDate: Date.now(),
                 request: {
                     type: 'PATCH',
                     url: `/api/products/${doc._id}`,
@@ -140,7 +141,9 @@ productRouter.route('/api/products/:id')
     })
 })
 .patch((req, res, next) => {
-    const updateOps = {};
+    const updateOps = {
+        lastModifiedDate: Date.now()
+    };
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }

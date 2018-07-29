@@ -26,6 +26,7 @@ cityRouter.route('/api/cities')
                     capital: city.capital,
                     location: city.location,
                     _id: city._id,
+                    lastModifiedDate: city.lastModifiedDate,
                     request: {
                         type: 'GET',
                         url: `/api/cities/${city._id}`
@@ -46,7 +47,8 @@ cityRouter.route('/api/cities')
         name: req.body.name,
         country: req.body.country,
         capital: req.body.capital,
-        location: req.body.location
+        location: req.body.location,
+        lastModifiedDate: Date.now()
     }); 
     city
     .save()
@@ -59,6 +61,7 @@ cityRouter.route('/api/cities')
                 capital: city.capital,
                 location: city.location,
                 _id: city._id,
+                lastModifiedDate: city.lastModifiedDate,
                 request: {
                     type: 'PUT',
                     url: `/api/cities/${city._id}`,
@@ -100,6 +103,7 @@ cityRouter.route('/api/cities/:id')
                     lat: city.location.lat,
                     long: city.location.long
                 },
+                lastModifiedDate: city.lastModifiedDate,
                 _id: city._id,
                 request: {
                     type: 'DELETE',
@@ -119,19 +123,21 @@ cityRouter.route('/api/cities/:id')
 })
 .put((req, res) => {
     if (mongoose.Types.ObjectId.isValid(req.cityId)) {
-        console.log("!!!!!!!!!!!!!!!!!", req.body.location);
         City
         .update(
             {_id: req.cityId},
-            { $set: { 
-                name: req.body.name,
-                country: req.body.country,
-                capital: req.body.capital,
-                location: {
-                    lat: req.body.location.lat,
-                    long: req.body.location.long
+            { 
+                $set: {
+                    name: req.body.name,
+                    country: req.body.country,
+                    capital: req.body.capital,
+                    location: {
+                        lat: req.body.location.lat,
+                        long: req.body.location.long
+                    },
+                    lastModifiedDate: Date.now()
                 }
-            }}, 
+            }, 
             { upsert : true })
         .exec()
         .then(result => {

@@ -24,7 +24,8 @@ const citySchema = new mongoose.Schema({
             type: Number,
             reqired: true
         }
-    }
+    },
+    lastModifiedDate: Date
   });
 
 const City = mongoose.model('City', citySchema);
@@ -41,7 +42,8 @@ cities.forEach(cityData => {
                 location: {
                     lat: cityData.location.lat,
                     long: cityData.location.long
-                }
+                },
+                lastModifiedDate: Date.now()
             });
             newCity.save( (err, newCity) => {
                 if (err) return console.error(err);
