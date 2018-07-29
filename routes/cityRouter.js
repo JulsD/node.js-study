@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 const cityRouter = express.Router();
 import { City } from '../models';
+import { updateDate } from '../middlewares';
 
 cityRouter.param('id', function(req, res, next, id) {
     req.cityId = id;
@@ -41,14 +42,14 @@ cityRouter.route('/api/cities')
         res.status(500).json({error: err});
     })
 })
-.post((req, res) => {
+.post(updateDate, (req, res) => {
     const city = new City({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         country: req.body.country,
         capital: req.body.capital,
         location: req.body.location,
-        lastModifiedDate: Date.now()
+        lastModifiedDate: req.body.lastModifiedDate
     }); 
     city
     .save()
@@ -121,7 +122,7 @@ cityRouter.route('/api/cities/:id')
         res.status(500).json({error: err});
     })
 })
-.put((req, res) => {
+.put(updateDate, (req, res) => {
     if (mongoose.Types.ObjectId.isValid(req.cityId)) {
         City
         .update(
@@ -135,7 +136,7 @@ cityRouter.route('/api/cities/:id')
                         lat: req.body.location.lat,
                         long: req.body.location.long
                     },
-                    lastModifiedDate: Date.now()
+                    lastModifiedDate: req.body.lastModifiedDate
                 }
             }, 
             { upsert : true })

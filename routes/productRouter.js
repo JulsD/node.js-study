@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 const productRouter = express.Router();
 import { Product } from '../models';
+import { updateDate } from '../middlewares';
 
 productRouter.param('id', function(req, res, next, id) {
     req.productId = id;
@@ -47,11 +48,12 @@ productRouter.route('/api/products')
         res.status(500).json({error: err});
     })
 })
-.post((req, res) => {
+.post(updateDate, (req, res) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        color: req.body.color
+        color: req.body.color,
+        lastModifiedDate: req.body.lastModifiedDate
     }); 
     product
     .save()
@@ -62,7 +64,7 @@ productRouter.route('/api/products')
                 name: doc.name,
                 color: doc.color,
                 _id: doc._id,
-                lastModifiedDate: Date.now(),
+                lastModifiedDate: doc.lastModifiedDate,
                 request: {
                     type: 'PATCH',
                     url: `/api/products/${doc._id}`,
