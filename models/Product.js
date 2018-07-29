@@ -2,8 +2,14 @@ import mongoose from 'mongoose';
 import products from '../data/products';
 
 const productSchema = new mongoose.Schema({
-    name: String,
-    color: String,
+    name: {
+        type: String,
+        reqired: true
+    },
+    color: {
+        type: String,
+        reqired: true
+    },
     reviews: [String]
   });
 
