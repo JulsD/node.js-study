@@ -1,36 +1,39 @@
-import { find } from 'lodash';
+import mongoose from 'mongoose';
+import products from '../data/products';
 
-class Product {
-    constructor(products) {
-        this.products = products? products : [];
-    }
+const productSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    name: {
+        type: String,
+        reqired: true
+    },
+    color: {
+        type: String,
+        reqired: true
+    },
+    reviews: [String],
+    lastModifiedDate: Date
+  });
 
-    add(product) {
-        let newId = this.createId();
-        product.id = newId;
-        return this.products.push(product);
-    }
+const Product = mongoose.model('Product', productSchema);
 
-    get(productID) {
-        let product = find(this.products, function(o){ return o.id == productID });
-        if(product) {
-            return product;
-        } else {
-            return {"product": "doesn't exist"}
+products.forEach(productData => {
+    Product.findOne(productData, function (err, product) {
+        if (err) throw err;
+        if (!product) {
+            const newProduct = new Product({
+                _id: new mongoose.Types.ObjectId(),
+                name: productData.name,
+                color: productData.color,
+                reviews: productData.reviews,
+                lastModifiedDate: Date.now()
+            }); 
+            newProduct.save( (err, newProduct) => {
+                if (err) return console.error(err);
+                console.log(newProduct, ' created');
+            });
         }
-    }
-
-    fetchAll() {
-        return this.products;
-    }
-
-    createId() {
-        let newId = Math.random()*10;
-        if(find(this.products, { id: newId})) {
-            this.createId();
-        }
-        return newId;
-    }
-}
+    })
+});
 
 export default Product;
