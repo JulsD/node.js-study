@@ -1,15 +1,54 @@
 import mongoose from 'mongoose';
+import cities from '../data/cities';
 
 const citySchema = new mongoose.Schema({
-    name: String,
-    country: String,
-    capital: Boolean,
+    _id: mongoose.Schema.Types.ObjectId,
+    name: {
+        type: String,
+        reqired: true
+    },
+    country: {
+        type: String,
+        reqired: true
+    },
+    capital: {
+        type: Boolean,
+        reqired: true
+    },
     location: {
-        lat: Number,
-        long: Number
+        lat: {
+            type: Number,
+            reqired: true
+        },
+        long: {
+            type: Number,
+            reqired: true
+        }
     }
   });
 
 const City = mongoose.model('City', citySchema);
+
+cities.forEach(cityData => {
+    City.findOne(cityData, function (err, city) {
+        if (err) throw err;
+        if (!city) {
+            let newCity = new City({
+                _id: new mongoose.Types.ObjectId(),
+                name: cityData.name,
+                country: cityData.country,
+                capital: cityData.capital,
+                location: {
+                    lat: cityData.location.lat,
+                    long: cityData.location.long
+                }
+            });
+            newCity.save( (err, newCity) => {
+                if (err) return console.error(err);
+                console.log(newCity, ' created');
+            });
+        }
+    })
+});
 
 export default City;
