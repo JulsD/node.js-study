@@ -1,0 +1,772 @@
+---
+swagger: "2.0"
+info:
+  description: node.js-study API samples
+  version: 0.0.1
+  title: node.js-study
+  termsOfService: ""
+  contact:
+    email: dutchak.julia@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+host: localehost:8000
+basePath: /v1
+tags:
+- name: city
+  description: Operations with cities list
+- name: product
+  description: Operations with Products
+- name: user
+  description: Operations with users
+schemes:
+- http
+paths:
+  /api/cities:
+    get:
+      tags:
+      - city
+      summary: Returns a list of all cities
+      description: Returns all cities from the system that the user has access to
+      operationId: getAllCities
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CityList'
+          responseSchema:
+            $ref: '#/definitions/CityList'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    post:
+      tags:
+      - city
+      summary: Add a new city to the list
+      description: By passing a city object in the request body you can add new city to the list
+      operationId: addCity
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: City object that needs to be added to the list
+        required: true
+        schema:
+          $ref: '#/definitions/City'
+      responses:
+        201:
+          description: new city was successfuly added
+          examples:
+            type: something here
+          schema:
+            $ref: '#/definitions/inline_response_201'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              createdCity:
+                $ref: '#/definitions/City'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+  /api/cities/{cityId}:
+    get:
+      tags:
+      - city
+      summary: Find city by ID
+      description: Returns a single city
+      operationId: getCityById
+      produces:
+      - application/json
+      parameters:
+      - name: cityId
+        in: path
+        description: ID of city to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/City'
+          responseSchema:
+            $ref: '#/definitions/City'
+        404:
+          description: No valid entry found for provided ID
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    put:
+      tags:
+      - city
+      summary: Updated city
+      description: If city of provided ID exists in db quest will update it with new information, if not will create new one
+      operationId: updateOrCreateCity
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cityId
+        in: path
+        description: ID of city to update or create
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: City data
+        required: true
+        schema:
+          $ref: '#/definitions/City'
+      responses:
+        200:
+          description: City updated
+          schema:
+            $ref: '#/definitions/inline_response_200'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              request:
+                $ref: '#/definitions/RequestDescription'
+        404:
+          description: ID provided is in invalid format
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      tags:
+      - city
+      summary: Deletes a city by ID
+      operationId: deleteCity
+      produces:
+      - application/json
+      parameters:
+      - name: cityId
+        in: path
+        description: City id to delete
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: City with ID provided was deleted
+          schema:
+            $ref: '#/definitions/inline_response_200'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              request:
+                $ref: '#/definitions/RequestDescription'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+  /api/users:
+    get:
+      tags:
+      - user
+      summary: Returns a list of all users
+      description: Returns all users from the system that the user has access to
+      operationId: getAllUsers
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/UsersList'
+          responseSchema:
+            $ref: '#/definitions/UsersList'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+  /api/users/{userId}:
+    get:
+      tags:
+      - user
+      summary: Find user by ID
+      description: Returns a single user by provided ID
+      operationId: getUserById
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: path
+        description: ID of user to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+          responseSchema:
+            $ref: '#/definitions/User'
+        404:
+          description: No valid entry found for provided ID
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      tags:
+      - user
+      summary: Deletes a user by ID
+      operationId: deleteUserById
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: path
+        description: User id to delete
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: User with ID provided was deleted
+          schema:
+            $ref: '#/definitions/inline_response_200'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              request:
+                $ref: '#/definitions/RequestDescription'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+  /api/products:
+    get:
+      tags:
+      - product
+      summary: Returns a list of all products
+      description: Returns all products from the system that the user has access to
+      operationId: getAllProducts
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProductsList'
+          responseSchema:
+            $ref: '#/definitions/ProductsList'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    post:
+      tags:
+      - product
+      summary: Add a new product to the list
+      description: By passing a product object in the request body you can add new product to the list
+      operationId: addProduct
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Product object that needs to be added to the list
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        201:
+          description: new product was successfuly added
+          schema:
+            $ref: '#/definitions/inline_response_201_1'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              createdProduct:
+                $ref: '#/definitions/Product'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+  /api/products/{productId}:
+    get:
+      tags:
+      - product
+      summary: Find product by ID
+      description: Returns a single product by provided ID
+      operationId: getProductById
+      produces:
+      - application/json
+      parameters:
+      - name: productId
+        in: path
+        description: ID of product to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Product'
+          responseSchema:
+            $ref: '#/definitions/Product'
+        404:
+          description: No valid entry found for provided ID
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      tags:
+      - product
+      summary: Deletes a product by ID
+      operationId: deleteProduct
+      produces:
+      - application/json
+      parameters:
+      - name: productId
+        in: path
+        description: Product id to delete
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Product with ID provided was deleted
+          schema:
+            $ref: '#/definitions/inline_response_200'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              request:
+                $ref: '#/definitions/RequestDescription'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+    patch:
+      tags:
+      - product
+      summary: Updated product
+      description: If product of provided ID exists in db request will update it with new information, if not will create new one
+      operationId: updateOrCreateProduct
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: productId
+        in: path
+        description: ID of product to update or create
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: Product data
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        200:
+          description: Product updated
+          schema:
+            $ref: '#/definitions/inline_response_200'
+          responseSchema:
+            type: object
+            properties:
+              message:
+                type: string
+              request:
+                $ref: '#/definitions/RequestDescription'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+  /api/products/{productId}/reviews:
+    get:
+      tags:
+      - product
+      summary: Find product by ID and returns its reviews
+      description: Returns an aray of revies of the product by provided ID
+      operationId: getProductReviews
+      produces:
+      - application/json
+      parameters:
+      - name: productId
+        in: path
+        description: ID of product, reviews of which to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ProductReviews'
+          responseSchema:
+            $ref: '#/definitions/ProductReviews'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          responseSchema:
+            $ref: '#/definitions/ErrorModel'
+definitions:
+  Product:
+    type: object
+    properties:
+      _id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: board
+      color:
+        type: string
+        example: blue
+      reviews:
+        $ref: '#/definitions/ProductReviews'
+      lastModifiedDate:
+        type: string
+        format: date-time
+        description: date in UTC
+      request:
+        $ref: '#/definitions/RequestDescription'
+    example:
+      request:
+        description: To get an updated product
+        type: GET
+        body:
+          name: Board
+          color: White
+        url: /api/products/:id
+      color: blue
+      reviews: ""
+      lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+      name: board
+      _id: 0
+  ProductReviews:
+    type: array
+    description: list of productsreviews
+    items:
+      type: string
+    example: good, exelent
+  ProductsList:
+    type: object
+    properties:
+      count:
+        type: integer
+        format: int64
+        example: 1
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/Product'
+    description: list of products
+    example:
+      count: 1
+      products:
+      - request:
+          description: To get an updated product
+          type: GET
+          body:
+            name: Board
+            color: White
+          url: /api/products/:id
+        color: blue
+        reviews: ""
+        lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+        name: board
+        _id: 0
+      - request:
+          description: To get an updated product
+          type: GET
+          body:
+            name: Board
+            color: White
+          url: /api/products/:id
+        color: blue
+        reviews: ""
+        lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+        name: board
+        _id: 0
+  User:
+    type: object
+    required:
+    - _id
+    properties:
+      _id:
+        type: integer
+        format: int64
+      username:
+        type: string
+        example: Stive
+      email:
+        type: string
+        example: stive@org.com
+      password:
+        type: string
+        example: kasdf798fas
+      age:
+        type: number
+        example: 88.0
+      lastModifiedDate:
+        type: string
+        format: date-time
+        description: date in UTC
+      request:
+        $ref: '#/definitions/RequestDescription'
+    example:
+      request:
+        description: To get an updated product
+        type: GET
+        body:
+          name: Board
+          color: White
+        url: /api/products/:id
+      password: kasdf798fas
+      lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+      _id: 0
+      email: stive@org.com
+      age: 88.0
+      username: Stive
+  UsersList:
+    type: object
+    properties:
+      count:
+        type: integer
+        format: int64
+        example: 52
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+    description: list of users
+    example:
+      count: 52
+      users:
+      - request:
+          description: To get an updated product
+          type: GET
+          body:
+            name: Board
+            color: White
+          url: /api/products/:id
+        password: kasdf798fas
+        lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+        _id: 0
+        email: stive@org.com
+        age: 88.0
+        username: Stive
+      - request:
+          description: To get an updated product
+          type: GET
+          body:
+            name: Board
+            color: White
+          url: /api/products/:id
+        password: kasdf798fas
+        lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+        _id: 0
+        email: stive@org.com
+        age: 88.0
+        username: Stive
+  City:
+    type: object
+    required:
+    - _id
+    - capital
+    - country
+    - location
+    - name
+    properties:
+      _id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Kiev
+      country:
+        type: string
+        example: Ukraine
+      capital:
+        type: boolean
+        example: true
+      location:
+        $ref: '#/definitions/City_location'
+      lastModifiedDate:
+        type: string
+        format: date-time
+        description: date in UTC
+      request:
+        $ref: '#/definitions/RequestDescription'
+    example:
+      country: Ukraine
+      request:
+        description: To get an updated product
+        type: GET
+        body:
+          name: Board
+          color: White
+        url: /api/products/:id
+      capital: true
+      lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+      name: Kiev
+      location:
+        lat: "52.097621"
+        long: "52.097621"
+      _id: 0
+  CityList:
+    type: array
+    description: list of cities
+    items:
+      $ref: '#/definitions/City'
+  ErrorModel:
+    type: object
+    required:
+    - code
+    - message
+    properties:
+      message:
+        type: string
+      code:
+        type: integer
+        minimum: 100.0
+        maximum: 600.0
+  RequestDescription:
+    type: object
+    required:
+    - type
+    - url
+    properties:
+      type:
+        type: string
+        example: GET
+      url:
+        type: string
+        example: /api/products/:id
+      description:
+        type: string
+        example: To get an updated product
+      body:
+        type: object
+        example:
+          name: Board
+          color: White
+        properties: {}
+    example:
+      description: To get an updated product
+      type: GET
+      body:
+        name: Board
+        color: White
+      url: /api/products/:id
+  inline_response_201:
+    properties:
+      message:
+        type: string
+      createdCity:
+        $ref: '#/definitions/City'
+  inline_response_200:
+    properties:
+      message:
+        type: string
+      request:
+        $ref: '#/definitions/RequestDescription'
+    example:
+      request:
+        description: To get an updated product
+        type: GET
+        body:
+          name: Board
+          color: White
+        url: /api/products/:id
+      message: message
+  inline_response_201_1:
+    properties:
+      message:
+        type: string
+      createdProduct:
+        $ref: '#/definitions/Product'
+    example:
+      createdProduct:
+        request:
+          description: To get an updated product
+          type: GET
+          body:
+            name: Board
+            color: White
+          url: /api/products/:id
+        color: blue
+        reviews: ""
+        lastModifiedDate: 2000-01-23T04:56:07.000+00:00
+        name: board
+        _id: 0
+      message: message
+  City_location:
+    properties:
+      lat:
+        type: integer
+        format: int32
+        example: "52.097621"
+      long:
+        type: integer
+        format: int32
+        example: "52.097621"
+    example:
+      lat: "52.097621"
+      long: "52.097621"
