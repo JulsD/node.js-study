@@ -6,6 +6,10 @@ import bodyParser from 'body-parser';
 import { productRouter, userRouter, cityRouter } from './routes';
 import { queryParser, cookieParser, cookieLog } from './middlewares'
 
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+const swaggerDocument = YAML.load('./api/swagger.yaml');
+
 const app = express();
 
 app.get('/', (req, res) => res.send('Hello World!'));
@@ -21,6 +25,9 @@ app.get('/clear-cookie',function(req, res, next){
 });
 app.get('/get-cookie', cookieLog);
 
-app.use(bodyParser.json(), queryParser, cookieParser, productRouter, userRouter, cityRouter);
+app.use('/api', bodyParser.json(), queryParser, cookieParser, productRouter, userRouter, cityRouter);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/v1/api', bodyParser.json(), queryParser, cookieParser, productRouter, userRouter, cityRouter);
 
 export default app;

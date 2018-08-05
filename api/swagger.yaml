@@ -10,7 +10,7 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-host: localehost:8000
+host: localhost:8080
 basePath: /v1
 tags:
 - name: city
